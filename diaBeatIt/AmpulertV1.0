@@ -1,0 +1,204 @@
+diff --git a/diaBeatIt/ContentView.swift b/diaBeatIt/ContentView.swift
+index 33114ac..5150c05 100644
+--- a/diaBeatIt/ContentView.swift
++++ b/diaBeatIt/ContentView.swift
+@@ -11,60 +11,48 @@ struct ContentView: View {
+     @State private var categoryDescription: String = ""
+     @State private var imageUrl1: String = ""
+     @State private var imageUrl2: String = ""
++    @State private var navigateToResult: Bool = false
+     
+     var body: some View {
+-        VStack {
+-            Form {
+-                Section(header: Text("Enter HgbA1C Data")) {
+-                    TextField("HgbA1C #1", text: $hgba1c1)
+-                        .keyboardType(.decimalPad)
+-                    TextField("HgbA1C #2", text: $hgba1c2)
+-                        .keyboardType(.decimalPad)
+-                    TextField("HgbA1C #3", text: $hgba1c3)
+-                        .keyboardType(.decimalPad)
+-                    TextField("HgbA1C #4", text: $hgba1c4)
+-                        .keyboardType(.decimalPad)
+-                    TextField("HgbA1C #5", text: $hgba1c5)
+-                        .keyboardType(.decimalPad)
+-                }
+-                
+-                Button(action: calculateAverageRealVariability) {
+-                    Text("Calculate Average Real Variability")
+-                }
+-            }
+-            
+-            if !averageRealVariability.isEmpty {
+-                Text("Average Real Variability: \(averageRealVariability)")
+-                    .padding()
+-                Text("Category: \(category)")
+-                    .padding()
+-                Text(categoryDescription)
+-                    .padding()
+-                VStack {
+-                    if let url1 = URL(string: imageUrl1) {
+-                        AsyncImage(url: url1) { image in
+-                            image.resizable()
+-                                .aspectRatio(contentMode: .fit)
+-                                .frame(width: 200, height: 200)
+-                        } placeholder: {
+-                            ProgressView()
+-                        }
+-                        .padding()
++        NavigationView {
++            VStack {
++                Form {
++                    Section(header: Text("Enter HgbA1C Data")) {
++                        TextField("HgbA1C #1", text: $hgba1c1)
++                            .keyboardType(.decimalPad)
++                        TextField("HgbA1C #2", text: $hgba1c2)
++                            .keyboardType(.decimalPad)
++                        TextField("HgbA1C #3", text: $hgba1c3)
++                            .keyboardType(.decimalPad)
++                        TextField("HgbA1C #4", text: $hgba1c4)
++                            .keyboardType(.decimalPad)
++                        TextField("HgbA1C #5", text: $hgba1c5)
++                            .keyboardType(.decimalPad)
+                     }
+-                    if let url2 = URL(string: imageUrl2) {
+-                        AsyncImage(url: url2) { image in
+-                            image.resizable()
+-                                .aspectRatio(contentMode: .fit)
+-                                .frame(width: 200, height: 200)
+-                        } placeholder: {
+-                            ProgressView()
+-                        }
+-                        .padding()
++                    
++                    Button(action: {
++                        calculateAverageRealVariability()
++                        navigateToResult = true
++                    }) {
++                        Text("Calculate Average Real Variability")
+                     }
+                 }
++                .navigationTitle("HgbA1C Calculator")
++                
++                NavigationLink(
++                    destination: ResultView(
++                        averageRealVariability: averageRealVariability,
++                        category: category,
++                        categoryDescription: categoryDescription,
++                        imageUrl1: imageUrl1,
++                        imageUrl2: imageUrl2
++                    ),
++                    isActive: $navigateToResult
++                ) {
++                    EmptyView()
++                }
+             }
+         }
+-        .padding()
+     }
+     
+     func calculateAverageRealVariability() {
+@@ -125,6 +113,52 @@ struct ContentView: View {
+     }
+ }
+ 
++struct ResultView: View {
++    var averageRealVariability: String
++    var category: String
++    var categoryDescription: String
++    var imageUrl1: String
++    var imageUrl2: String
++    
++    var body: some View {
++        ScrollView {
++            VStack {
++                Text("Average Real Variability: \(averageRealVariability)")
++                    .padding()
++                Text("Category: \(category)")
++                    .padding()
++                Text(categoryDescription)
++                    .padding()
++                
++                VStack {
++                    if let url1 = URL(string: imageUrl1) {
++                        AsyncImage(url: url1) { image in
++                            image.resizable()
++                                .aspectRatio(contentMode: .fit)
++                                .frame(maxWidth: .infinity)
++                        } placeholder: {
++                            ProgressView()
++                        }
++                        .padding()
++                    }
++                    if let url2 = URL(string: imageUrl2) {
++                        AsyncImage(url: url2) { image in
++                            image.resizable()
++                                .aspectRatio(contentMode: .fit)
++                                .frame(maxWidth: .infinity)
++                        } placeholder: {
++                            ProgressView()
++                        }
++                        .padding()
++                    }
++                }
++            }
++            .padding()
++        }
++        .navigationTitle("Results")
++    }
++}
++
+ struct ContentView_Previews: PreviewProvider {
+     static var previews: some View {
+         ContentView()
+diff --git a/diaBeatIt/Tester.swift b/diaBeatIt/Tester.swift
+new file mode 100644
+index 0000000..1978db5
+--- /dev/null
++++ b/diaBeatIt/Tester.swift
+@@ -0,0 +1,9 @@
++//
++//  Tester.swift
++//  dontDiaQuick
++//
++//  Created by Christopher Taicher on 6/23/24.
++//
++
++import Foundation
++#Tester
+diff --git a/dontDiaQuick.xcodeproj/project.pbxproj b/dontDiaQuick.xcodeproj/project.pbxproj
+index 8819827..2b109ab 100644
+--- a/dontDiaQuick.xcodeproj/project.pbxproj
++++ b/dontDiaQuick.xcodeproj/project.pbxproj
+@@ -7,6 +7,7 @@
+ 	objects = {
+ 
+ /* Begin PBXBuildFile section */
++		9A4FC9462C28A77300A4ADF9 /* Tester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4FC9452C28A77300A4ADF9 /* Tester.swift */; };
+ 		9AEA6C662C1D200C001DBA4A /* diaBeatItApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA6C652C1D200C001DBA4A /* diaBeatItApp.swift */; };
+ 		9AEA6C682C1D200C001DBA4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA6C672C1D200C001DBA4A /* ContentView.swift */; };
+ 		9AEA6C6A2C1D200D001DBA4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AEA6C692C1D200D001DBA4A /* Assets.xcassets */; };
+@@ -34,6 +35,7 @@
+ /* End PBXContainerItemProxy section */
+ 
+ /* Begin PBXFileReference section */
++		9A4FC9452C28A77300A4ADF9 /* Tester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tester.swift; sourceTree = "<group>"; };
+ 		9AEA6C622C1D200C001DBA4A /* dontDiaQuick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dontDiaQuick.app; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		9AEA6C652C1D200C001DBA4A /* diaBeatItApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = diaBeatItApp.swift; sourceTree = "<group>"; };
+ 		9AEA6C672C1D200C001DBA4A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+@@ -96,6 +98,7 @@
+ 			children = (
+ 				9AEA6C652C1D200C001DBA4A /* diaBeatItApp.swift */,
+ 				9AEA6C672C1D200C001DBA4A /* ContentView.swift */,
++				9A4FC9452C28A77300A4ADF9 /* Tester.swift */,
+ 				9AEA6C692C1D200D001DBA4A /* Assets.xcassets */,
+ 				9AEA6C6B2C1D200D001DBA4A /* Preview Content */,
+ 			);
+@@ -257,6 +260,7 @@
+ 			isa = PBXSourcesBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
++				9A4FC9462C28A77300A4ADF9 /* Tester.swift in Sources */,
+ 				9AEA6C682C1D200C001DBA4A /* ContentView.swift in Sources */,
+ 				9AEA6C662C1D200C001DBA4A /* diaBeatItApp.swift in Sources */,
+ 			);

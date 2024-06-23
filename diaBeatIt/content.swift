@@ -92,7 +92,7 @@ struct ContentView: View {
         case ..<0.332:
             category = "Low Risk"
             categoryDescription = "You have a 3.8% risk of a major adverse limb event."
-            imageUrl1 = "https://your-s3-bucket-url/category1-image1.png"
+            imageUrl1 = "https://dontdiaquick.s3.amazonaws.com/ToeAmp-A.png"
             imageUrl2 = "https://dontdiaquick.s3.amazonaws.com/ToeAmp-B.png"
         case 0.332..<0.522:
             category = "Medium Risk"
